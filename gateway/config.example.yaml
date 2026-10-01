@@ -1,0 +1,37 @@
+# MCP Gateway configuration. Copy to config.yaml and fill in real values.
+mcp_gateway:
+  endpoint: https://mcp.internal.example.com
+  auth:
+    type: oauth_client_credentials
+    client_id_env: MCP_CLIENT_ID
+    client_secret_env: MCP_CLIENT_SECRET
+  servers:
+    - name: servicenow
+      transport: http
+      endpoint: https://mcp-snow.internal/sse
+    - name: approval
+      transport: http
+      endpoint: https://mcp-approval.internal/sse
+    - name: notify
+      transport: http
+      endpoint: https://mcp-notify.internal/sse
+  rate_limit:
+    requests_per_minute: 60
+    burst: 10
+
+servicenow:
+  # Used by the real client (M1+). Leave unset to use the in-memory mock.
+  # instance_url: https://example.service-now.com
+  # auth:
+  #   type: oauth
+  #   token_url: https://example.service-now.com/oauth_token.do
+  #   client_id_env: SNOW_CLIENT_ID
+  #   client_secret_env: SNOW_CLIENT_SECRET
+  # default_table: sc_req_item
+
+approvals:
+  # Thresholds above which manager approval is required.
+  cost_threshold_usd: 500
+  destructive_fields:
+    - "*_terminated"
+    - "active=false"
